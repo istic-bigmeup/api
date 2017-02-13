@@ -6,4 +6,4 @@ Projet donné par l'entreprise BigMeUp, concernant le portage adminisratif.
 
 ## Technologie utilisée
 
-* BulletPHP
+* PHP
