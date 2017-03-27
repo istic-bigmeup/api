@@ -6,5 +6,7 @@ if(isset($_GET["id"])) {
     $id = $_GET["id"];
     $query = array('_id' => new MongoId($id));
 
-    echo from_table_to_json($missions->find($query));
+    echo from_table_to_json($factures->find($query));
 }
+
+?>
