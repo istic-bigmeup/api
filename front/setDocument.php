@@ -32,6 +32,7 @@ if(isset($_FILES['file'])){// Si on upload un fichier
 	$tab["libelle"] 			= $type;
 	$tab["date_enregistrement"]	= "";
 	$tab["date_echeance"]		= "";
+	$tab["date_upload"]			= date("Y-m-d");
 	$tab["verification"]		= "0";
 	$tab["id_user"]				= $user_id;
 	$tab["url"]					= $nomFic;
@@ -40,6 +41,19 @@ if(isset($_FILES['file'])){// Si on upload un fichier
 	
 	// On met le fichier dans le document d'upload
 	if(move_uploaded_file($file["tmp_name"], $uploadDirectory . $tab["url"])){
+		
+		// ===== UPLOAD =====
+		// On met les fichiers non traités à [Annulé] (état 4)
+		// Construction du where et du replace
+		$where 		= array('id_user' 		=> $user_id,
+							'verification'	=> "0",
+							'libelle'		=> $type);
+		$replace 	= array('$set' 	=> array("verification"	=> "4"));
+		// On fait l'update
+		$inserted = $documents->update($where, $replace);
+		
+		// ===== INSERT =====
+		// On insère le champ
 		$inserted = insert_data($documents, $champs, $tab);
 	}
 	

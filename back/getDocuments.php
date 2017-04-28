@@ -9,7 +9,8 @@ $fields = array	(	"_id" 	=> 1,
 $usr = from_table_to_json($users->find([], $fields));
 
 // Getting the missions
-$docs = from_table_to_json($documents->find([]));
+$docs = $documents->find([]);
+$docs = from_table_to_json($docs->sort(array("verification" => 1)));
 
 $resTab = array();
 $resTab["documents"] 	= $docs;

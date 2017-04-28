@@ -10,6 +10,8 @@ $devis		= $db->devis;
 $factures	= $db->factures;
 $documents	= $db->documents;
 
+$MAIL_FROM = 'bigmeup@bigmeup.fr';
+
 function from_table_to_json($table){
     $array = array();
 

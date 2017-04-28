@@ -5,7 +5,6 @@ $send = false;
 
 if(isset($_POST["email"])){
     $to = htmlspecialchars($_POST["email"]);
-    $from = 'no_reply@bigmeup.istic.univ-rennes1.fr';
 
     $errorC = (!checkmymail($to)) ? true : false; //vérifie la conformité de l'email'
 
@@ -29,13 +28,12 @@ if(isset($_POST["email"])){
             if($res){
                 //Définition des paramètres du mail
                 $subject = "(Re)initialisation du mot de passe";
-                $message = "Cliquez sur le lien suivant pour (re)définir votre mot de passe: \n";
+                $message = "Cliquez sur le lien suivant pour (ré)initialiser votre mot de passe sur l'espace administratif: \n";
                 $message .= "http://bigmeup.istic.univ-rennes1.fr/frontend/mdp_oublie.html?t=" . $token ;
-                $headers = 'From: '. $from . "\r\n";
-                $headers = 'Reply-to: '. $from . "\r\n";
-                $headers.= 'MIME-Version: 1.0' . "\r\n";
-                $headers .= "Content-Type: text/plain" . "\r\n";
-                $headers = 'X-Mailer: PHP/' . phpversion();
+                $headers = 'From: '. $MAIL_FROM . "\r\n";
+                $headers .= 'MIME-Version: 1.0' . "\r\n";
+                $headers .= "Content-Type: text/plain; charset=utf-8 Content-Transfer-Encoding: 8bit" . "\r\n";
+                $headers .= 'X-Mailer: PHP/' . phpversion();
 
                 //Envoie du mail
                 if(mail($to,$subject,$message,$headers)){

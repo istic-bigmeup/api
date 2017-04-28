@@ -9,7 +9,7 @@ $fields = array	(	"_id" 	=> 1,
 $usr = from_table_to_json($users->find([], $fields));
 
 // Getting the missions
-$missions = from_table_to_json($missions->find([]));
+$missions = from_table_to_json($missions->find([])->sort(array("_id" => -1, "date_derniere_modif" => -1)));
 
 $resTab = array();
 $resTab["missions"] 	= $missions;

@@ -1,6 +1,7 @@
 <?php
 include("../connBD.php");
 
+//Définition des champs à tester par défaut
 $champs = array(
     "nom",
     "prenom",
@@ -27,6 +28,7 @@ $champs = array(
 if(isset($_POST["id"]) && isset($_POST["mdp"])){
     $id = htmlspecialchars($_POST["id"]);
     $mdp = htmlspecialchars($_POST["mdp"]);
+    $mdp = sha1($id.$mdp); //Hachage du mot de passe avec avec ajount d'un grain de sel'
 
     // On défini les paramètres de la requête
     $where = array('_id' 	=> new MongoId($id));
@@ -45,6 +47,14 @@ if(isset($_POST["id"]) && isset($_POST["mdp"])){
 else if(isset($_POST["token"]) && isset($_POST["mdp"])){
     $token = htmlspecialchars($_POST["token"]);
     $mdp = htmlspecialchars($_POST["mdp"]);
+
+    //Récupération de l'id de l'utilisateur
+    $query = array('mdpToken' => $token);
+    $json = from_table_to_json($users->find($query));
+    $user = json_decode($json, true);
+    $id = $user[0]["_id"]['$id'];
+
+    $mdp = sha1($id.$mdp); //Hachage du mot de passe avec avec ajout d'un grain de sel
     $response = array("response" => "false");
 
 	// On fait l'update
