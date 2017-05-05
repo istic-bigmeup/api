@@ -6,14 +6,23 @@ $file = $_FILES["file"]["tmp_name"];
 $csv = file_get_contents($file);
 $array_from_file = array_map("str_getcsv", explode("\n", $csv));
 
+//Vérifie si pour chaque ligne, on obtient un String (true) ou un tableau (false)
+$test_format = (sizeof($array_from_file[0]) == 1) ? true : false;
+
 //Formation de l'entête
-$header = $array_from_file[0][0];
-$header = str_replace('"', '', $header);
-$header_array = explode(",", $header);
+if($test_format){
+    $header_string = $array_from_file[0][0];
+    $header_string = str_replace('"', '', $header_string);
+    $header = explode(",", $header_string);
+}
+else{
+    $header = $array_from_file[0];
+}
+
 $header_formated = array(); //Tableau qui contiendra les noms des champs dans la BD
 
 //Correspondance de l'entête du fichier aux champs de la bd
-foreach($header_array as $key => $val){
+foreach($header as $key => $val){
     switch($val){
         case 'first_name' : $header_formated[$key] = "nom";
         break;
@@ -43,55 +52,63 @@ foreach($header_array as $key => $val){
             $header_formated[$key] = $val;
     }
 }
+
 $header_formated[] = "ban"; //Rajouter le champ "ban" à la fin du tableau
 
 //Formation du tableau final de données
 $content = array();
 $res = true;
 foreach($array_from_file as $key => $row){
-    if($key > 0){        
-        foreach($row as $cle => $val){            
-            $val = str_replace('"', '', $val); //suppression des côtes            
-            if(strlen($val) > 0){
-                $content_array = explode(",", $val);
+    if($key > 0){ //Exclure l'entête
 
-                //formation du tableau à inserrer dans la BD
-                foreach($content_array as $k => $v){                    
-                    if($header_formated[$k] == "rang"){
-                        $v = ($v == "true") ? "1" : "0";
-                    }
-                    $content[$header_formated[$k]] = $v;
-                }
-                $content["ban"] = "0"; //Rajouter le champ "ban" avec la valeur à 0
+        if($test_format){
+            $row = str_replace('"', '', $row[0]); //Suppression des côtes
+            if(strlen($row) > 0){
+                $row_array = explode(",", $row);
+            }      
+        }
+        else{
+            $row_array = $row;
+        }
 
-                //Importation dans la BD
-                $where 	= array('pseudo' 	=> $content["pseudo"]);
-                $test_presence = $users->findOne($where);//Vérif de la présence éventuelle
+        if(sizeof($row_array) > 0){
+            //formation du tableau à inserrer dans la BD
+            foreach($row_array as $k => $v){                    
+                if($header_formated[$k] == "rang"){
+                    $v = ($v == "true") ? "1" : "0";
+                }
+                $content[$header_formated[$k]] = $v;
+            }
+            $content["ban"] = "0"; //Rajouter le champ "ban" avec la valeur à 0
 
-                if(is_null($test_presence)){
-                    $content["_id"] = new MongoId();
-                    $test = $users->insert($content);
-                }
-                else{
-                    $replace = array('$set' => $content);
-                    $test = $users->update($where, $replace);
-                }
+            //Importation dans la BD
+            $where 	= array('pseudo' 	=> $content["pseudo"]);
+            $test_presence = $users->findOne($where);//Vérif de la présence éventuelle
 
-                //Vérification du resultat de la requête
-                if($test["err"] == NULL){
-                    $res = $res && true;
-                }
-                else{
-                    $res = $res && false;
-                }
-            } 
+            if(is_null($test_presence)){
+                $content["_id"] = new MongoId();
+                $test = $users->insert($content);
+            }
+            else{
+                $replace = array('$set' => $content);
+                $test = $users->update($where, $replace, array("upsert" => true));
+            }
+
+            //Vérification du resultat de la requête
+            if($test["err"] == NULL){
+                $res = $res && true;
+            }
+            else{
+                $res = $res && false;
+            }
+
         }
     }
 }
 
 // On envoie la réponse
 if($res){
-    echo json_encode(["answer" => "true"]);
+    echo json_encode(array("answer" => "true"));
 } else {
-    echo json_encode(["answer" => "false"]);
+    echo json_encode(array("answer" => "false"));
 }

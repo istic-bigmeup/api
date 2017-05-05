@@ -9,7 +9,7 @@ if(isset($_GET["id_user"])) {
 	$fields = array	(	"_id" 	=> 1,
 						"email" => 1
 					);
-	$usr = from_table_to_json($users->find([], $fields));
+	$usr = from_table_to_json($users->find(array(), $fields));
 	
 	// Getting the client
 	$query 	= array('id_client' => htmlspecialchars($_GET["id_user"]));
@@ -32,7 +32,7 @@ if(isset($_GET["id_user"])) {
 	$fields = array	(	"_id" 	=> 1,
 						"email" => 1
 					);
-	$usr = from_table_to_json($users->find([], $fields));
+	$usr = from_table_to_json($users->find(array(), $fields));
 	
 	// Getting the client
 	$regex = new MongoRegex("/^" . (date("Y") - 1) . "/");

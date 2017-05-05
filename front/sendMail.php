@@ -29,7 +29,7 @@ if(isset($_POST["email"])){
                 //Définition des paramètres du mail
                 $subject = "(Re)initialisation du mot de passe";
                 $message = "Cliquez sur le lien suivant pour (ré)initialiser votre mot de passe sur l'espace administratif: \n";
-                $message .= "http://bigmeup.istic.univ-rennes1.fr/frontend/mdp_oublie.html?t=" . $token ;
+                $message .= "http://administration.bigmeup.fr/mdp_oublie.html?t=" . $token ;
                 $headers = 'From: '. $MAIL_FROM . "\r\n";
                 $headers .= 'MIME-Version: 1.0' . "\r\n";
                 $headers .= "Content-Type: text/plain; charset=utf-8 Content-Transfer-Encoding: 8bit" . "\r\n";
@@ -44,7 +44,7 @@ if(isset($_POST["email"])){
     }
 }
 
-echo json_encode(["response" => $send]);
+echo json_encode(array("response" => $send));
 
 
 //Définition des fonctions

@@ -41,8 +41,8 @@ if(isset($_POST["modifProfil"])){
 	
 	// On envoie la réponse
 	if($res != false){
-		echo json_encode(["answer" => "true"]);
+		echo json_encode(array("answer" => "true"));
 	} else {
-		echo json_encode(["answer" => "false"]);
+		echo json_encode(array("answer" => "false"));
 	}
 }

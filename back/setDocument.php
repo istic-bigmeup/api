@@ -15,9 +15,9 @@ if(isset($_POST["valider"])){// Si validation
 	
 	// On envoie la réponse
 	if($res != false){
-		echo json_encode(["answer" => "true"]);
+		echo json_encode(array("answer" => "true"));
 	} else {
-		echo json_encode(["answer" => "false"]);
+		echo json_encode(array("answer" => "false"));
 	}
 } else if(isset($_POST["refus"])){// Sinon si refus
 	// Envoi du mail avec la raison
@@ -33,7 +33,7 @@ if(isset($_POST["valider"])){// Si validation
 	$headers .= "Content-Type: text/plain" . "\r\n";
 	$headers .= 'X-Mailer: PHP/' . phpversion();
 	
-	mail($email, "Refus de votre document", "Votre document a été refusé pour ce motif : " . $raison . "\nRendez vous sur http://bigmeup.istic.univ-rennes1.fr/frontend/document.html afin d'en importer autre.", $headers);
+	mail($email, "Refus de votre document", "Votre document a été refusé pour ce motif : " . $raison . "\nRendez vous sur http://administration.bigmeup.fr/document.html afin d'en importer autre.", $headers);
 	
 	// Construction du where et du replace
     $where 		= array('_id' 	=> new MongoId($_POST["refus"]));
@@ -48,8 +48,8 @@ if(isset($_POST["valider"])){// Si validation
 	
 	// On envoie la réponse
 	if($res != false){
-		echo json_encode(["answer" => "true"]);
+		echo json_encode(array("answer" => "true"));
 	} else {
-		echo json_encode(["answer" => "false"]);
+		echo json_encode(array("answer" => "false"));
 	}
 }

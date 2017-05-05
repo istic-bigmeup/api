@@ -18,12 +18,12 @@ if(isset($_GET["id"]) && isset($_GET["mdp"])){ //Si on vérifie le mot de passe 
 
         if (sizeof($json) > 0) {
             if($mdp == $json[0]["mdp"]){
-                echo json_encode(["answer" => "true"]);
+                echo json_encode(array("answer" => "true"));
                 exit();
             }
         }
     }
-    echo json_encode(["answer" => "false"]);   
+    echo json_encode(array("answer" => "false"));   
 }
 else if(isset($_GET["id"])) {// Si on cherche un user via son id
     $id = $_GET["id"];
@@ -50,18 +50,16 @@ else if(isset($_GET["login"])){// Si on cherche un user via son login
 
         if (sizeof($json) > 0) {
             if($mdp == $json[0]["mdp"]){
-                echo json_encode([	
+                echo json_encode(array(	
                     "answer" 	=> "true",
                     "id" 		=> $json[0]["_id"]['$id'],
                     "rang"		=> $json[0]["rang"]
-                ]);
+                ));
                 exit();
             }
-            var_dump($json[0]["mdp"], $mdp, $mdp == $json[0]["mdp"]);
-            exit();
         }
     }
-    echo json_encode(["answer" => "false"]);
+    echo json_encode(array("answer" => "false"));
 }
 else if(isset($_GET["mail"])){// Si on cherche un user via son mail
 	$mail = htmlspecialchars($_GET['mail']);
@@ -72,9 +70,9 @@ else if(isset($_GET["mail"])){// Si on cherche un user via son mail
 		$json = json_decode($json, true);
 
 		if(sizeof($json) > 0){
-			echo json_encode(["answer" => "true", "id" => $json[0]["_id"]['$id']]);
+			echo json_encode(array("answer" => "true", "id" => $json[0]["_id"]['$id']));
 			exit();
 		}
 	}
-	echo json_encode(["answer" => "false"]);
+	echo json_encode(array("answer" => "false"));
 }

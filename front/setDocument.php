@@ -26,6 +26,8 @@ if(isset($_FILES['file'])){// Si on upload un fichier
 	$type 	= $_POST["type"];
 	$user_id= $_POST["user_id"];
 	
+	date_default_timezone_set("Europe/Paris");
+	
 	$nomFic = $type . $user_id . "-" . date("YmdHis") . "." . end((explode(".", $file["name"])));
 	
 	$tab 						= array();
@@ -58,8 +60,8 @@ if(isset($_FILES['file'])){// Si on upload un fichier
 	}
 	
 	if($inserted){
-		echo json_encode(["answer" => "true"]);
+		echo json_encode(array("answer" => "true"));
 	} else {
-		echo json_encode(["answer" => "false"]);
+		echo json_encode(array("answer" => "false"));
 	}
 }

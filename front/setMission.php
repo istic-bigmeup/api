@@ -136,9 +136,9 @@ if(isset($_POST["ajoutMission"]) || isset($_POST["modifMission"])){// Création 
 	}
 	
 	if($inserted){
-		echo json_encode(["answer" => "true"]);
+		echo json_encode(array("answer" => "true"));
 	} else {
-		echo json_encode(["answer" => "false"]);
+		echo json_encode(array("answer" => "false"));
 	}
 } else if(isset($_POST["annulMission"])){// Annulation de la mission
 	$idMission = $_POST["annulMission"];
@@ -155,9 +155,9 @@ if(isset($_POST["ajoutMission"]) || isset($_POST["modifMission"])){// Création 
 	
 	// On envoie la réponse
 	if($res != false){
-		echo json_encode(["answer" => "true"]);
+		echo json_encode(array("answer" => "true"));
 	} else {
-		echo json_encode(["answer" => "false"]);
+		echo json_encode(array("answer" => "false"));
 	}
 } else if(isset($_POST["refusMission"])){// Refus de la mission
 	$idMission = $_POST["refusMission"];
@@ -176,9 +176,9 @@ if(isset($_POST["ajoutMission"]) || isset($_POST["modifMission"])){// Création 
 	
 	// On envoie la réponse
 	if($res != false){
-		echo json_encode(["answer" => "true"]);
+		echo json_encode(array("answer" => "true"));
 	} else {
-		echo json_encode(["answer" => "false"]);
+		echo json_encode(array("answer" => "false"));
 	}
 } else if(isset($_POST["validMission"])){// Validation de la mission
 	$idMission = $_POST["validMission"];
@@ -246,9 +246,9 @@ if(isset($_POST["ajoutMission"]) || isset($_POST["modifMission"])){// Création 
 	
 	// On envoie la réponse
 	if($res != false){
-		echo json_encode(["answer" => "true"]);
+		echo json_encode(array("answer" => "true"));
 	} else {
-		echo json_encode(["answer" => "false"]);
+		echo json_encode(array("answer" => "false"));
 	}
 } else if(isset($_POST["realMission"])){// Réalisation de la mission
 	$idMission = $_POST["realMission"];
@@ -314,16 +314,16 @@ if(isset($_POST["ajoutMission"]) || isset($_POST["modifMission"])){// Création 
 	
 	// On envoie la réponse
 	if($res != false){
-		echo json_encode(["answer" => "true"]);
+		echo json_encode(array("answer" => "true"));
 	} else {
-		echo json_encode(["answer" => "false"]);
+		echo json_encode(array("answer" => "false"));
 	}
 }
 
 // Envoi des mails si toutes les variables sont OK
 if(	$mailClient != null && $mailPrestataire != null && $etatDeLaMission != null && $idMission != null){
 	// Construction du texte
-	$texte = "La mission ayant pour client " . $mailClient . " et comme prestataire " . $mailPrestataire . " est passée à l'état : " . $etatDeLaMission . "\nRendez vous sur cette page afin de consulter la missions : http://bigmeup.istic.univ-rennes1.fr/frontend/creationMission.html#msn" . $idMission;
+	$texte = "La mission ayant pour client " . $mailClient . " et comme prestataire " . $mailPrestataire . " est passée à l'état : " . $etatDeLaMission . "\nRendez vous sur cette page afin de consulter la missions : http://administration.bigmeup.fr/creationMission.html#msn" . $idMission;
 	
 	// Header
 	$headers = 'From: '. $MAIL_FROM . "\r\n";

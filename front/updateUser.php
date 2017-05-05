@@ -28,20 +28,30 @@ $champs = array(
 if(isset($_POST["id"]) && isset($_POST["mdp"])){
     $id = htmlspecialchars($_POST["id"]);
     $mdp = htmlspecialchars($_POST["mdp"]);
-    $mdp = sha1($id.$mdp); //Hachage du mot de passe avec avec ajount d'un grain de sel'
+    $res = false;
 
-    // On défini les paramètres de la requête
-    $where = array('_id' 	=> new MongoId($id));
-	$replace = array("mdp" => $mdp);
+    //Teste la conformité du mdp
+    $testSize = (strlen($mdp) >= 8) ? true : false;
+    $matchingMin = preg_match("/[a-z]/", $mdp);
+    $matchingMaj = preg_match("/[A-Z]/", $mdp);
+    $matchingSpecialChar = preg_match("/[&@€£ùµ¢%#:;,=_'~\!\^\$\(\)\{\}\?\.\/\\\|]/", $mdp);
 
-	// On fait l'update
-	$res = $users->update($where, array('$set' => $replace));
+    if($testSize && $matchingMin && $matchingMaj && $matchingSpecialChar){
+        $mdp = sha1($id.$mdp); //Hachage du mot de passe avec avec ajout d'un grain de sel
+
+        // On défini les paramètres de la requête
+        $where = array('_id' 	=> new MongoId($id));
+        $replace = array("mdp" => $mdp);
+
+        // On fait l'update
+        $res = $users->update($where, array('$set' => $replace));
+    }
 
 	// On renvoie la réponse
 	if($res){
-		echo json_encode(["response" => "true"]);
+		echo json_encode(array("response" => "true"));
 	} else {
-		echo json_encode(["response" => "false"]);
+		echo json_encode(array("response" => "false"));
 	}
 }
 else if(isset($_POST["token"]) && isset($_POST["mdp"])){
